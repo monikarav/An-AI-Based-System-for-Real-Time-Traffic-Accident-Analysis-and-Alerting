@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Accident History</title>
+<style>
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Poppins;
+    padding:40px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+th,td{
+    padding:12px;
+    border-bottom:1px solid #334155;
+    text-align:center;
+}
+th{
+    background:#1e293b;
+}
+a{color:#38bdf8;text-decoration:none;}
+</style>
+</head>
+<body>
+
+<h2>🚨 Accident Detection History</h2>
+
+<table>
+<tr>
+    <th>ID</th>
+    <th>Result</th>
+    <th>Confidence (%)</th>
+    <th>Location</th>
+    <th>Processing Time</th>
+    <th>Date & Time</th>
+</tr>
+
+{% for row in records %}
+<tr>
+    <td>{{ row[0] }}</td>
+    <td>{{ row[1] }}</td>
+    <td>{{ row[2] }}</td>
+    <td>{{ row[3] }}</td>
+    <td>{{ row[4] }}</td>
+    <td>{{ row[5] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<br><br>
+<a href="/">Back to Home</a>
+
+</body>
+</html>

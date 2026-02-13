@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Accident Analysis</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#050816;
+    color:white;
+    padding:40px;
+}
+
+/* Neon Text */
+.neon-text{
+    color:#00f0ff;
+    text-shadow:0 0 10px #00f0ff,0 0 20px #00f0ff;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+/* Header */
+.header{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+/* Dashboard Grid */
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+/* Cards */
+.card{
+    background:#0c1224;
+    padding:25px;
+    border-radius:15px;
+    border:1px solid #00f0ff30;
+    box-shadow:0 0 15px #00f0ff20;
+    text-align:center;
+}
+
+.card h3{
+    color:#00f0ff;
+    margin-bottom:15px;
+}
+
+/* Circular Gauge */
+.gauge{
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    background:conic-gradient(#00f0ff {{ confidence }}%, #1a1f3a 0%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:20px auto;
+}
+
+.gauge-inner{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:#050816;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    font-weight:bold;
+    color:#00f0ff;
+}
+
+/* Risk Badge */
+.risk{
+    padding:8px 15px;
+    border-radius:20px;
+    display:inline-block;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+.high{
+    background:#ff004c;
+    color:white;
+    box-shadow:0 0 15px #ff004c;
+}
+
+.medium{
+    background:#ffae00;
+    color:black;
+    box-shadow:0 0 15px #ffae00;
+}
+
+.low{
+    background:#00ff9c;
+    color:black;
+    box-shadow:0 0 15px #00ff9c;
+}
+
+/* Summary */
+.summary{
+    margin-top:40px;
+    padding:25px;
+    background:#0c1224;
+    border-radius:15px;
+    border-left:4px solid #00f0ff;
+}
+
+/* Video Section */
+.video-section{
+    margin-top:50px;
+    text-align:center;
+}
+
+.video-container{
+    width:700px;
+    max-width:100%;
+    height:400px;
+    margin:20px auto;
+    border-radius:15px;
+    overflow:hidden;
+    border:2px solid #00f0ff;
+    box-shadow:0 0 25px #00f0ff40;
+}
+
+.video-container video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* Flash Background if Accident */
+.alert-flash{
+    animation:flash 1s infinite alternate;
+}
+
+@keyframes flash{
+    from{background:#050816;}
+    to{background:#1a0008;}
+}
+
+/* Buttons */
+.buttons{
+    margin-top:40px;
+    text-align:center;
+}
+
+.btn{
+    padding:12px 25px;
+    border-radius:30px;
+    border:none;
+    font-size:14px;
+    background:linear-gradient(90deg,#00c6ff,#0072ff);
+    color:white;
+    cursor:pointer;
+    margin:10px;
+    text-decoration:none;
+}
+
+.btn:hover{
+    transform:scale(1.05);
+}
+
+</style>
+</head>
+
+<body class="{% if 'Accident' in result %}alert-flash{% endif %}">
+
+<div class="container">
+
+<div class="header">
+    <h1 class="neon-text">🚨 AI Accident Detection Report</h1>
+</div>
+
+<div class="dashboard">
+
+    <!-- Confidence Gauge -->
+    <div class="card">
+        <h3>Confidence Level</h3>
+        <div class="gauge">
+            <div class="gauge-inner">
+                {{ confidence }}%
+            </div>
+        </div>
+    </div>
+
+    <!-- Frame Stats -->
+    <div class="card">
+        <h3>Frame Analysis</h3>
+        <p>Total Frames: {{ total_frames }}</p>
+        <p>Accident Frames: {{ accident_frames }}</p>
+        <p>Processing Time: {{ processing_time }} sec</p>
+    </div>
+
+    <!-- Location & Risk -->
+    <div class="card">
+        <h3>Location</h3>
+        <p>{{ location }}</p>
+
+        {% set risk_level = 'Low' %}
+        {% if confidence > 70 %}
+            {% set risk_level = 'High' %}
+        {% elif confidence > 40 %}
+            {% set risk_level = 'Medium' %}
+        {% endif %}
+
+        <div class="risk 
+            {% if risk_level == 'High' %}high
+            {% elif risk_level == 'Medium' %}medium
+            {% else %}low{% endif %}">
+            Risk Level: {{ risk_level }}
+        </div>
+    </div>
+
+</div>
+
+<!-- Summary -->
+<div class="summary">
+    <h3 class="neon-text">Incident Summary</h3>
+    <p>
+        {% if 'Accident' in result %}
+            High probability accident detected at {{ location }}.
+            System confidence is {{ confidence }}%.
+            Immediate attention recommended.
+        {% else %}
+            No significant accident patterns detected at {{ location }}.
+            System confidence indicates safe conditions.
+        {% endif %}
+    </p>
+</div>
+
+<!-- Video -->
+<div class="video-section">
+    <h3 class="neon-text">Analyzed Video</h3>
+
+    <div class="video-container">
+        <video controls>
+            <source src="{{ url_for('uploaded_file', filename=video_file) }}">
+        </video>
+    </div>
+</div>
+
+<!-- Buttons -->
+<div class="buttons">
+    <a href="/" class="btn">Analyze Another Video</a>
+
+    <a href="/download_report?result={{ result }}&confidence={{ confidence }}&location={{ location }}&total_frames={{ total_frames }}&accident_frames={{ accident_frames }}&processing_time={{ processing_time }}" 
+       class="btn">Download PDF Report</a>
+</div>
+
+</div>
+
+</body>
+</html>

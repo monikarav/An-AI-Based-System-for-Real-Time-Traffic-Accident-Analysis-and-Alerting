@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Accident Detection System</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* ❌ No scroll */
+        }
+
+        .header {
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 600;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            letter-spacing: 1px;
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* VIDEO SECTION */
+        .video-section {
+            flex: 2;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,255,255,0.4);
+        }
+
+        .video-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* RESULT PANEL */
+        .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .card {
+            padding: 25px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 20px rgba(0,255,255,0.3);
+            text-align: center;
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .alert-box {
+            font-size: 26px;
+            font-weight: 700;
+            padding: 15px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .safe {
+            background: rgba(0,255,100,0.2);
+            color: #00ff88;
+            border: 2px solid #00ff88;
+        }
+
+        .danger {
+            background: rgba(255,0,0,0.2);
+            color: #ff4d4d;
+            border: 2px solid #ff4d4d;
+            animation: flash 1s infinite;
+        }
+
+        @keyframes flash {
+            0% { box-shadow: 0 0 10px red; }
+            50% { box-shadow: 0 0 30px red; }
+            100% { box-shadow: 0 0 10px red; }
+        }
+
+        .info-text {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .footer {
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 13px;
+            background: rgba(0,0,0,0.3);
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        🚨 AI Real-Time Accident Detection Dashboard
+    </div>
+
+    <div class="main">
+
+        <!-- LEFT VIDEO -->
+        <div class="video-section">
+            <img src="{{ url_for('video') }}">
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="panel">
+
+            <div class="card">
+                <h2>Live Status</h2>
+                <div id="alertBox" class="alert-box safe">
+                    🟢 SAFE – Monitoring Traffic
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>System Info</h2>
+                <div class="info-text">
+                    Model: MobileNetV2 CNN<br>
+                    Input Size: 224 x 224<br>
+                    Framework: Flask Deployment
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Final Year Project | Deep Learning + Computer Vision
+    </div>
+
+<script>
+    function updateStatus() {
+        fetch('/status')
+            .then(res => res.json())
+            .then(data => {
+                let box = document.getElementById("alertBox");
+
+                if (data.status === "Accident") {
+                    box.className = "alert-box danger";
+                    box.innerHTML = "🚨 ACCIDENT DETECTED!";
+                } else {
+                    box.className = "alert-box safe";
+                    box.innerHTML = "🟢 SAFE – Monitoring Traffic";
+                }
+            });
+    }
+
+    setInterval(updateStatus, 1000);
+</script>
+
+</body>
+</html>

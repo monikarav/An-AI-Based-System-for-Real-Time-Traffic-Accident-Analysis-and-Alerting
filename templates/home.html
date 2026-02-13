@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Accident Detection</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { 
+            margin:0; 
+            padding:0; 
+            box-sizing:border-box; 
+            font-family:'Poppins',sans-serif; 
+        }
+
+        body {
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#000000);
+            background-size:400% 400%;
+            animation:gradientBG 12s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0%{background-position:0% 50%;}
+            50%{background-position:100% 50%;}
+            100%{background-position:0% 50%;}
+        }
+
+        .card {
+            width:450px;
+            padding:40px;
+            border-radius:20px;
+            background:rgba(255,255,255,0.08);
+            backdrop-filter:blur(20px);
+            text-align:center;
+            color:white;
+            box-shadow:0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        h1 { 
+            margin-bottom:25px; 
+        }
+
+        .upload-box {
+            border:2px dashed #38bdf8;
+            padding:20px;
+            border-radius:15px;
+            margin-bottom:20px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .upload-box:hover { 
+            background:rgba(255,255,255,0.1); 
+        }
+
+        input[type="file"] { 
+            display:none; 
+        }
+
+        input[type="text"] {
+            width:100%;
+            padding:12px;
+            border-radius:10px;
+            border:none;
+            margin-bottom:15px;
+        }
+
+        button {
+            padding:12px 25px;
+            border-radius:30px;
+            border:none;
+            font-size:16px;
+            background:linear-gradient(90deg,#00c6ff,#0072ff);
+            color:white;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        button:hover { 
+            transform:scale(1.05); 
+        }
+
+        .loader { 
+            margin-top:15px; 
+            display:none; 
+        }
+
+        .gps-status{
+            font-size:12px;
+            margin-bottom:10px;
+            opacity:0.8;
+        }
+
+        .history-link{
+            margin-top:20px;
+            display:block;
+            color:#38bdf8;
+            text-decoration:none;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>🚗 AI Accident Detection</h1>
+
+    <form action="/analyze" method="POST" enctype="multipart/form-data" onsubmit="showLoader()">
+
+        <!-- Upload -->
+        <label class="upload-box">
+            📁 Click to Upload Video
+            <input type="file" name="video" required>
+        </label>
+
+        <!-- Manual Location Input -->
+        <input type="text" id="manualLocation" placeholder="Enter Location (Optional)">
+
+        <!-- Hidden GPS Field -->
+        <input type="hidden" name="location" id="locationInput">
+
+        <div class="gps-status" id="gpsStatus">
+            📍 Detecting GPS location...
+        </div>
+
+        <button type="submit">Analyze Now</button>
+
+        <div class="loader" id="loader">
+            ⏳ AI is analyzing your video...
+        </div>
+
+    </form>
+
+    <a href="/history" class="history-link">📊 View Accident History</a>
+
+</div>
+
+<script>
+
+// Show Loader
+function showLoader(){
+    document.getElementById("loader").style.display="block";
+
+    // If manual location filled → use it
+    const manual = document.getElementById("manualLocation").value;
+    if(manual.trim() !== ""){
+        document.getElementById("locationInput").value = manual;
+    }
+}
+
+// Auto GPS Detection
+navigator.geolocation.getCurrentPosition(
+    function(position){
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        document.getElementById("locationInput").value =
+            "Lat: " + latitude + ", Lon: " + longitude;
+
+        document.getElementById("gpsStatus").innerText =
+            "📍 GPS Location Auto-Detected";
+    },
+    function(){
+        document.getElementById("gpsStatus").innerText =
+            "⚠ GPS Permission Denied (Enter manually)";
+    }
+);
+
+</script>
+
+</body>
+</html>
