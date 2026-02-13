@@ -1,4 +1,4 @@
-# 🚦 AccidentGuard: Video-Based Accident Detection System
+# 🚦An AI-Enabled System for Real-Time Traffic Accident Analysis and Alerting.
 
 The AccidentGuard system is an intelligent video analytics platform designed to automatically detect road accidents from uploaded traffic or surveillance videos. By leveraging computer vision and machine learning techniques along with a user-friendly web interface, the system helps authorities and organizations identify accident events efficiently and respond in a timely manner.
 
@@ -47,6 +47,7 @@ AccidentGuard applies computer vision and deep learning concepts to analyze vide
 The system follows a modular architecture: users upload traffic videos → backend extracts frames and applies detection logic → results displayed on the web interface. This ensures scalability, modularity, and separation of concerns.
 
 ---
+# Program:
 
 ## Accident_detection_system.py
 
@@ -262,6 +263,70 @@ navigator.geolocation.getCurrentPosition(
 </body>
 </html>
 ```
+
+## History.html
+
+```
+<!DOCTYPE html>
+<html>
+<head>
+<title>Accident History</title>
+<style>
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Poppins;
+    padding:40px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+th,td{
+    padding:12px;
+    border-bottom:1px solid #334155;
+    text-align:center;
+}
+th{
+    background:#1e293b;
+}
+a{color:#38bdf8;text-decoration:none;}
+</style>
+</head>
+<body>
+
+<h2>🚨 Accident Detection History</h2>
+
+<table>
+<tr>
+    <th>ID</th>
+    <th>Result</th>
+    <th>Confidence (%)</th>
+    <th>Location</th>
+    <th>Processing Time</th>
+    <th>Date & Time</th>
+</tr>
+
+{% for row in records %}
+<tr>
+    <td>{{ row[0] }}</td>
+    <td>{{ row[1] }}</td>
+    <td>{{ row[2] }}</td>
+    <td>{{ row[3] }}</td>
+    <td>{{ row[4] }}</td>
+    <td>{{ row[5] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<br><br>
+<a href="/">Back to Home</a>
+
+</body>
+</html>
+```
+
 ## Result.html
 
 ```
@@ -533,68 +598,6 @@ body{
 </body>
 </html>
 ```
-## History.html
-
-```
-<!DOCTYPE html>
-<html>
-<head>
-<title>Accident History</title>
-<style>
-body{
-    background:#0f172a;
-    color:white;
-    font-family:Poppins;
-    padding:40px;
-}
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-th,td{
-    padding:12px;
-    border-bottom:1px solid #334155;
-    text-align:center;
-}
-th{
-    background:#1e293b;
-}
-a{color:#38bdf8;text-decoration:none;}
-</style>
-</head>
-<body>
-
-<h2>🚨 Accident Detection History</h2>
-
-<table>
-<tr>
-    <th>ID</th>
-    <th>Result</th>
-    <th>Confidence (%)</th>
-    <th>Location</th>
-    <th>Processing Time</th>
-    <th>Date & Time</th>
-</tr>
-
-{% for row in records %}
-<tr>
-    <td>{{ row[0] }}</td>
-    <td>{{ row[1] }}</td>
-    <td>{{ row[2] }}</td>
-    <td>{{ row[3] }}</td>
-    <td>{{ row[4] }}</td>
-    <td>{{ row[5] }}</td>
-</tr>
-{% endfor %}
-
-</table>
-
-<br><br>
-<a href="/">Back to Home</a>
-
-</body>
-</html>
-```
 ---
 
 ## Output :
@@ -602,12 +605,13 @@ a{color:#38bdf8;text-decoration:none;}
 
 <img width="1657" height="886" alt="Home page" src="https://github.com/user-attachments/assets/0e60978b-8966-4bf2-a6cd-a9a8c1f8f019" />
 
+# Model Acuuracy page
+<img width="1917" height="1078" alt="Result page" src="https://github.com/user-attachments/assets/d3eaee9a-3aa5-496e-b45b-e80c956839c8" />
+
 # Result page
 
 <img width="1916" height="1078" alt="Result1 page" src="https://github.com/user-attachments/assets/0bf31b77-30b8-49fb-a3eb-357e80ea22d6" />
 
-# Model Acuuracy page
-<img width="1917" height="1078" alt="Result page" src="https://github.com/user-attachments/assets/d3eaee9a-3aa5-496e-b45b-e80c956839c8" />
 
 # Analysis Details 
 
