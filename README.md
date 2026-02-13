@@ -44,15 +44,42 @@ AccidentGuard applies computer vision and deep learning concepts to analyze vide
 
 ## 🧱 System Architecture
 
-![System Architecture](screenshots/architecture.png)
-
 The system follows a modular architecture: users upload traffic videos → backend extracts frames and applies detection logic → results displayed on the web interface. This ensures scalability, modularity, and separation of concerns.
 
 ---
 
-## 💻 Installation & Setup
+## core code
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/monikarav/An-AI-Based-System-for-Real-Time-Traffic-Accident-Analysis-and-Alerting.git
-cd An-AI-Based-System-for-Real-Time-Traffic-Accident-Analysis-and-Alerting
+```python
+import cv2
+import numpy as np
+
+def detect_accident(video_path):
+    cap = cv2.VideoCapture(video_path)
+    accident_detected = False
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        # Example detection logic
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        edges = cv2.Canny(gray, 50, 150)
+
+        # Simple threshold: if too many edges, flag accident
+        if np.sum(edges) > 1e6:
+            accident_detected = True
+            break
+
+    cap.release()
+    return accident_detected
+
+video_file = 'uploads/test_video.mp4'
+result = detect_accident(video_file)
+if result:
+    print("🚨 Accident Detected")
+else:
+    print("✅ No Accident")
+```
+
